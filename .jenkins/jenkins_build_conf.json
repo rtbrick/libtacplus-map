@@ -9,7 +9,9 @@
 		{
 			"name": "builder",
 			"image": "docker.rtbrick.net/devops/images/rtbrick/ubuntu-bionic-builder:latest",
-			"deps": [ ],
+			"deps": [
+				"libaudit-dev", "libcjose-dev"
+			],
 			"build_cmd": ".jenkins/jenkins_build_run_make.sh"
 		}
 	],
