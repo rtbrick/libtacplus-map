@@ -37,7 +37,7 @@ AM_PROG_LIBTOOL
 
 # Add -Wall -Werror if we are using GCC.
 if test "x$GCC" = "xyes"; then
-      CFLAGS="$CFLAGS -Wall -Werror"
+      CFLAGS="$CFLAGS -Wall"
 fi
 
 dnl --------------------------------------------------------------------
