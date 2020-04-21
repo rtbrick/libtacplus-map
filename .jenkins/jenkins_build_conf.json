@@ -21,7 +21,9 @@
         "pkg_name": "rtbrick-libtacplus-map",
         "pkg_descr": "RtBrick fork of libtacplus-map: mapping library to enable tacacs-authenticated users to login without a local (or ldap) password entry",
         "pkg_group": "rtbrick-rbfs",
-        "pkg_deps": [],
+        "pkg_deps": [
+		"libaudit1", "libcap-ng0"
+	],
 	"pkg_services": [ ],
 
         "upload_cmd": ".jenkins/jenkins_upload_to_latest_ubuntu_rtbrick-rbfs_bionic_rtbrick-rbfs.sh"
