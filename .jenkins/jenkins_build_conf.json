@@ -10,7 +10,11 @@
 			"name": "builder",
 			"image": "docker.rtbrick.net/devops/images/rtbrick/ubuntu-bionic-builder:latest",
 			"deps": [
-				"libaudit-dev", "libcjose-dev"
+				"libaudit-dev",
+				"libcjose-dev",
+				"libcap-ng-dev",
+				"rtbrick-json-parser",
+				"rtbrick-json-builder"
 			],
 			"build_cmd": ".jenkins/jenkins_build_run_make.sh"
 		}
@@ -22,7 +26,11 @@
         "pkg_descr": "RtBrick fork of libtacplus-map: mapping library to enable tacacs-authenticated users to login without a local (or ldap) password entry",
         "pkg_group": "rtbrick-rbfs",
         "pkg_deps": [
-		"libaudit1", "libcap-ng0"
+		"libaudit1",
+		"libcjose0",
+		"libcap-ng0",
+		"rtbrick-json-parser",
+		"rtbrick-json-builder"
 	],
 	"pkg_services": [ ],
 
