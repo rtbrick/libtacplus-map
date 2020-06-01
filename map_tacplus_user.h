@@ -56,9 +56,12 @@ struct tacacs_mapping {
     char tac_rhost[UT_HOSTSIZE+1]; /* ssh, etc. originating host, for logging */
 };
 
+/* Returns rtbrick predefined user*/
+void get_mapuser(char *role, unsigned priv_level, char *user);
+
 /* update the mapped user database */
 int update_mapuser(char *user, unsigned priv_level,
-    char *host, unsigned); /* returns true/false */
+    char *host, char *role, unsigned); /* returns true/false */
 char *get_user_to_auth(char *pamuser); /* returns NULL or strdup'ed memory */
 unsigned map_get_sessionid(void); /* return the sessionid for this session */
 
