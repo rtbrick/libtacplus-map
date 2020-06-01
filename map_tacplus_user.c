@@ -32,6 +32,8 @@
 
 #include "map_tacplus_user.h"
 
+#define USERNAME_MAX_LEN 20 /* match mapped name in mapfile */
+
 static const char *libname = "libtacplus_map";
 
 static const char *mapfile = MAP_TACPLUS_FILE;
@@ -540,6 +542,72 @@ void set_auid_immutable(void)
 }
 
 /*
+ * Returns mapped user based on the privilage level
+ * This is rtbrick specific custom function which returns
+ * predefined local user in the system based on the privilage level
+ *
+ */
+
+void
+get_mapuser(char *role, unsigned priv_level, char *tacuser)
+{
+
+    FILE *pwfile;
+    struct passwd *ent;
+
+    pwfile = fopen("/etc/passwd", "r");
+    if(!pwfile) {
+        syslog(LOG_WARNING, "%s: failed to open /etc/passwd: %m", libname);
+        return;
+    }
+
+    if(role) {
+        while((ent = fgetpwent(pwfile)) && ent){
+            if(!ent->pw_name)
+                continue; /* shouldn't happen */
+            if(!strcmp(ent->pw_name, role)) {
+                strcpy(tacuser, role);
+                break;
+            }
+        }
+    }
+    fclose(pwfile);
+    if(strlen(tacuser) >= 1) {
+        return;
+    }
+
+    switch(priv_level)
+    {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+                snprintf(tacuser, USERNAME_MAX_LEN, "reader");
+                return;
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+        case 14:
+                snprintf(tacuser, USERNAME_MAX_LEN, "operator");
+                return;
+        case 15:
+                snprintf(tacuser, USERNAME_MAX_LEN, "supervisor");
+                return;
+        default:
+                snprintf(tacuser, USERNAME_MAX_LEN, "reader");
+                return;
+    }
+}
+
+
+/*
  * Check to see if login name found in /etc/passwd.  If so, use it.  If not
  * try to map to a localuser tacacsN where N <= to the TACACS+ privilege level.
  * The NSS lookup code needs to match this same algorithm.
@@ -547,11 +615,12 @@ void set_auid_immutable(void)
  * Returns 1 if user was mapped (!islocal), 0 if not mapped
  */
 int
-update_mapuser(char *user, unsigned priv_level, char *rhost, unsigned flags)
+update_mapuser(char *user, unsigned priv_level,
+                      char *rhost, char *role, unsigned flags)
 {
     FILE *pwfile;
     struct passwd *ent;
-    char tacuser[9]; /* "tacacs" + up to two digits plus 0 */
+    char tacuser[USERNAME_MAX_LEN] = {0};
     int islocal, foundtac;
     unsigned priv = priv_level;
     unsigned isrestrict = 0;
@@ -564,7 +633,7 @@ update_mapuser(char *user, unsigned priv_level, char *rhost, unsigned flags)
     }
 
 recheck:
-    snprintf(tacuser, sizeof tacuser, "tacacs%u", priv);
+    get_mapuser(role, priv, tacuser);
     for(islocal = foundtac = 0; (!islocal || !foundtac) &&
         (ent = fgetpwent(pwfile)); ) {
         if(!ent->pw_name)
