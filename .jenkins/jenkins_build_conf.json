@@ -1,50 +1,53 @@
 {
-    "bionic": {},
-    "onl": {
-        "pkg_group": "rtbrick-onl",
-        "upload_script": ".jenkins/jenkins_upload_to_latest_debian_rtbrick-onl_stretch_rtbrick-onl.sh"
+  "bionic": {},
+  "onl": {
+    "pkg_group": "rtbrick-onl",
+    "upload_script": ".jenkins/jenkins_upload_to_latest_debian_rtbrick-onl_stretch_rtbrick-onl.sh"
+  },
+  "__defaults__": {
+    "project": "rtbrick-libtacplus-map",
+    "version_mmr": {
+      "major": 1,
+      "minor": 0,
+      "rev": 0,
+      "label": "",
+      "meta": ""
     },
-    "__defaults__": {
-        "project": "rtbrick-libtacplus-map",
-        "version_mmr": {"major": 1, "minor": 0, "rev": 0, "label": "", "meta": ""},
-
-	"containers": [
-		{
-			"name": "builder",
-			"image": "docker.rtbrick.net/devops/images/rtbrick/ubuntu-bionic-builder:latest",
-			"compile_deps": [
-				"libaudit-dev",
-				"libcjose-dev",
-				"libcap-ng-dev",
-				"rtbrick-json-parser",
-				"rtbrick-json-builder"
-			],
-			"build_commands": [ 
-				"./auto.sh",
-                "./configure",
-                "make"
-				 ]
-		}
-	],
-
-        "pkg_commands": [ 
-			"make \"app_ver=$_ver_str\" install"
-			 ],
-		"pkg_dev_commands": [],
-		"pkg_dbg_commands": [],
-	    "pkg_cont": "builder",
-        "pkg_name": "rtbrick-libtacplus-map",
-        "pkg_descr": "RtBrick fork of libtacplus-map: mapping library to enable tacacs-authenticated users to login without a local (or ldap) password entry",
-        "pkg_group": "rtbrick-rbfs",
-        "pkg_deps": [
-		"libaudit1",
-		"libcjose0",
-		"libcap-ng0",
-		"rtbrick-json-parser",
-		"rtbrick-json-builder"
-	],
-	"pkg_services": [ ],
-
-        "upload_script": ".jenkins/jenkins_upload_to_latest_ubuntu_rtbrick-rbfs_bionic_rtbrick-rbfs.sh"
-    }
+    "containers": [
+      {
+        "name": "builder",
+        "image": "docker.rtbrick.net/devops/images/rtbrick/ubuntu-bionic-builder:latest",
+        "compile_deps": [
+          "libaudit-dev",
+          "libcjose-dev",
+          "libcap-ng-dev",
+          "rtbrick-json-parser",
+          "rtbrick-json-builder"
+        ],
+        "build_commands": [
+          "./auto.sh",
+          "./configure",
+          "make"
+        ]
+      }
+    ],
+    "pkg_commands": [
+      "make \"app_ver=$_ver_str\" install"
+    ],
+    "pkg_dev_commands": [],
+    "pkg_dbg_commands": [],
+    "pkg_cont": "builder",
+    "pkg_name": "rtbrick-libtacplus-map",
+    "pkg_descr": "RtBrick fork of libtacplus-map: mapping library to enable tacacs-authenticated users to login without a local (or ldap) password entry",
+    "pkg_group": "rtbrick-rbfs",
+    "pkg_deps": [
+      "libaudit1",
+      "libcjose0",
+      "libcap-ng0",
+      "rtbrick-json-parser",
+      "rtbrick-json-builder"
+    ],
+    "pkg_services": [],
+    "upload_script": ".jenkins/jenkins_upload_to_latest_ubuntu_rtbrick-rbfs_bionic_rtbrick-rbfs.sh"
+  }
 }
