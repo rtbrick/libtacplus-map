@@ -1215,10 +1215,6 @@ docker_prepare() {
 				# Check if this is an rtbrick package dependency
 				# or not.
 				case "$dep" in
-					rtbrick-*)
-						deps_to_be_resolved+=("$dep");
-					;;
-
 					*:::rtbrick-*)
 						local pkg_group_override="";
 						pkg_group_override="$(echo "$dep" | sed -E 's/^([^:]+):::(.+)$/\1/g')";
@@ -1248,6 +1244,10 @@ docker_prepare() {
 							deps_to_be_installed+=("$d");
 							echo "$d" >> "$apt_resolv_log";
 						done
+					;;
+
+					rtbrick-*)
+						deps_to_be_resolved+=("$dep");
 					;;
 
 					*)
